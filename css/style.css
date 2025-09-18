@@ -1,0 +1,499 @@
+/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
+
+/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+  color: #222;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+  resize: vertical;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --background-color: rgb(21, 34, 66);
+  --trans-background-color: rgba(21, 34, 66, 0.25);
+  --card-color: rgb(35, 46, 73);
+  --text-color: white;
+  --transparent-text: rgba(255, 255, 255, 0.55);
+  --accent-color: rgb(192, 200, 228);
+  --logo-color: rgba(255, 195, 74, 1);
+}
+
+body {
+  font-family: 'Rubik', 'Roboto', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.landing-container {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: min( 40vh, 700px);
+  width: 100vw;
+  margin: 0;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.video-wrapper {
+  position: absolute;
+  top: -1;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 50vh;
+  z-index: -1;
+  pointer-events: none;
+  /* fallback image if video doesnt load */
+  background-image: url('https://ubc-aviary.com/resources/banner-1-min.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.video-wrapper::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 101%;
+  content: '';
+  background-image: linear-gradient(to bottom,
+    var(--trans-background-color),
+    var(--background-color)
+  );
+}
+
+.landing-video {
+  z-index: -1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(1px);
+}
+
+.crowd-icon {
+  width: 100%;
+}
+
+.session-time-container {
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 0.8em;
+  color: var(--background-color);
+  background-color: var(--accent-color);
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 0.25em;
+  margin-bottom: 0.5em;
+  padding: 0.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  aspect-ratio: 1/1;
+}
+
+.session-time-to {
+  padding: 0;
+  margin: 0;
+  font-style: italic;
+  font-size: 0.5em;
+  line-height: 1.5em;
+}
+
+
+.logos-gallery{
+  display: flex;
+  padding-top: clamp(40px, 5.2vh, 80px);
+  margin-left: -15vw;
+  column-gap: clamp(20px, 5vw, 30px);
+  column-count: 3;
+  width: 130vw;
+  justify-content: space-evenly;
+  overflow: hidden;
+}
+
+.logo-badge {
+  height: clamp(50px, 6vh, 100px);
+  opacity: 0.5;
+}
+
+
+.main-title {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 3em;
+  color: var(--logo-color);
+  text-align: center;
+  /*text-shadow: 2px 2px 0px rgb(12, 198, 255), -2px -2px 0px rgb(241, 73, 73);*/
+}
+
+.main-subtitle {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 1.25em;
+  text-align: right;
+  color: var(--text-color);
+  align-self: flex-start;
+}
+
+.title-container{
+  padding-top: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  flex-direction: column;
+}
+
+.at-a-glance-container{
+  display: flex;
+  justify-content: space-between;
+}
+
+.glance-card {
+  width: 49%;
+  background-color: var(--card-color);
+  border-radius: 5px;
+  color: var(--text-color);
+  padding: 0 1em 0 1em;
+  overflow: hidden;
+  position: relative;
+}
+
+.glance-details {
+  color: var(--transparent-text);
+  font-size: 0.8rem;
+  font-style: italic;
+  padding: 0 0 1em 0;
+  margin: 0;
+}
+
+.glance-header {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1em;
+  margin-bottom: 0;
+}
+
+.general-header {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1em;
+  border-bottom: 1px solid var(--transparent-text);
+  padding: 0.5em 0 0.25em 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center; /* Center children horizontally */
+  width: 100%; /* avoid 100vw causing horizontal overflow with scrollbar */
+  margin-top: 2em;
+}
+
+.bold-face-time {
+  font-size: clamp(12px, 4em,50px);
+}
+
+.page-center {
+  width: min( 35em, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide visually and from screen readers
+ */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/*
+ * Hide only visually, but have it available for screen readers:
+ * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+ *
+ * 1. For long content, line feeds are not interpreted as spaces and small width
+ *    causes content to wrap 1 word per line:
+ *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+ */
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  /* 1 */
+}
+
+/*
+ * Extends the .visually-hidden class to allow the element
+ * to be focusable when navigated to via the keyboard:
+ * https://www.drupal.org/node/897638
+ */
+
+.visually-hidden.focusable:active,
+.visually-hidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  white-space: inherit;
+  width: auto;
+}
+
+/*
+ * Hide visually and from screen readers, but maintain layout
+ */
+
+.invisible {
+  visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * The use of `table` rather than `block` is only necessary if using
+ * `::before` to contain the top-margins of child elements.
+ */
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+/* For somewhat larger screens*/
+
+/* For full width desktop */
+@media only screen and (min-width: 42em) {
+  * {
+    font-size: 18px;
+  }
+  .at-a-glance-container {
+    flex-direction: column;
+    gap: 0.5em;
+    padding-right: 1.5em;
+    max-width: 15em;
+  }
+  .glance-card {
+    width: 100%;
+  }
+  .page-center {
+    flex-direction: row;
+    align-items: start;
+    width: min( calc(35em + 35em + 2em), 90vw);
+    padding: 1em;
+  }
+  /* Keep the main content from consuming extra width so the sidebar can grow */
+  .content-container {
+    max-width: 45em;
+  }
+
+}
+
+/* dark is the default option, here is light preference */
+@media (prefers-color-scheme: light) {
+  :root {
+    --text-color: rgba(21, 34, 66, 0.8);
+    --trans-background-color: rgba(255, 255, 255, 0.25);
+    --card-color: rgba(35, 46, 73, 0.04);
+    --background-color: white;
+    --transparent-text: rgba(21, 34, 66, 0.38);
+    --accent-color: rgb(192, 200, 228);
+    --logo-color: rgb(255, 185, 31);
+  }
+
+  .logo-badge {
+    opacity: 1;
+  }
+}
+
+
+@media print,
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 1.25dppx),
+  (min-resolution: 120dpi) {
+  /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid the additional HTTP request:
+   https://www.phpied.com/delay-loading-your-print-css/
+   ========================================================================== */
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: #fff !important;
+    color: #000 !important;
+    /* Black prints faster */
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]::after {
+    content: " (" attr(title) ")";
+  }
+
+  /*
+   * Don't show links that are fragment identifiers,
+   * or use the `javascript:` pseudo protocol
+   */
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
