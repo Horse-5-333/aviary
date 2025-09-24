@@ -205,7 +205,7 @@ body {
 
 .logo-badge {
   height: clamp(50px, 6vh, 100px);
-  opacity: 0.5;
+  opacity: 0.15;
 }
 
 
