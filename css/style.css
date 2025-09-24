@@ -96,6 +96,7 @@ textarea {
   --transparent-text: rgba(255, 255, 255, 0.55);
   --accent-color: rgb(192, 200, 228);
   --logo-color: rgba(255, 195, 74, 1);
+  font-size: 14px;
 }
 
 body {
@@ -193,19 +194,19 @@ body {
 
 
 .logos-gallery{
-  display: flex;
-  padding-top: clamp(40px, 5.2vh, 80px);
+  display: grid;
+  grid-auto-flow: column;
   margin-left: -15vw;
-  column-gap: clamp(20px, 5vw, 30px);
-  column-count: 3;
-  width: 130vw;
+  width: 100vw;
   justify-content: space-evenly;
-  overflow: hidden;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  height: 20vh;
 }
 
 .logo-badge {
   height: clamp(50px, 6vh, 100px);
-  opacity: 0.5;
+  opacity: 0.15;
+  width: auto;
 }
 
 
@@ -287,10 +288,15 @@ body {
 }
 
 .page-center {
-  width: min( 35em, 90vw);
+  width: min( 35em, 95vw);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  justify-content: center;
+}
+
+.content-container {
+  line-height: 1.5em;
 }
 
 /* ==========================================================================
@@ -379,7 +385,7 @@ body {
 /* For somewhat larger screens*/
 
 /* For full width desktop */
-@media only screen and (min-width: 42em) {
+@media only screen and (min-width: 50em) {
   * {
     font-size: 18px;
   }
@@ -400,7 +406,7 @@ body {
   }
   /* Keep the main content from consuming extra width so the sidebar can grow */
   .content-container {
-    max-width: 45em;
+    max-width: 35em;
   }
 
 }
