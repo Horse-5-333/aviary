@@ -546,7 +546,7 @@ body {
 .nav-menu-wrapper {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: grid-template-rows 0.5s cubic-bezier(.52, .17, .56, .96);
 }
 
 .mobile-nav.expanded .nav-menu-wrapper {
@@ -662,24 +662,26 @@ body {
 .hamburger-menu svg {
   /* No rotation on the SVG itself to keep alignment simple */
   transform: none;
+  overflow: visible;
+  /* Allow scaled paths to extend outside viewBox */
 }
 
 .hamburger-menu path {
-  transform-origin: 50% 50%;
+  transform-box: view-box;
+  transform-origin: 12px 12px;
+  /* Explicit center of the 24x24 SVG */
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/*
+/* 
    Icon strokes are at y=6, y=12, y=18. Center is 12,12.
-   Top (y=6): Move down 6px by translateY(6px).
-   Bottom (y=18): Move up 6px by translateY(-6px).
-   Rotation: 45deg.
-   Length: Scaled by sqrt(2) (~1.414) to fill the box diagonally.
-   Order: Translate (center) -> Rotate (align) -> ScaleX (lengthen).
-   (Note: scaleX applies to the local axis, so if after rotation X is diagonal, it lengthens diagonal).
+   Top (y=6): Move down 6px (translateY(6px)) to reach center.
+   Bottom (y=18): Move up 6px (translateY(-6px)) to reach center.
+   Once centered at 12,12, rotate around the origin (12,12).
+   Then scale length.
 */
 .mobile-nav.expanded .hamburger-menu path:nth-child(1) {
-  transform: translateX(-4px) translateY(4px) rotate(45deg) scaleX(1.41);
+  transform: translate(-4.5px, 4px) rotate(45deg);
 }
 
 .mobile-nav.expanded .hamburger-menu path:nth-child(2) {
@@ -687,7 +689,7 @@ body {
 }
 
 .mobile-nav.expanded .hamburger-menu path:nth-child(3) {
-  transform: translateY(-6px) translateX(-3.5px) rotate(-45deg) scaleX(1.414);
+  transform: translate(-4.5px, -4.5px) rotate(-45deg);
 }
 
 @media (prefers-color-scheme: light) {
