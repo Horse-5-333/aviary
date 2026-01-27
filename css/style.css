@@ -113,7 +113,7 @@ body {
   position: relative;
   background-size: cover;
   background-position: center;
-  height: min( 40vh, 700px);
+  height: min(40vh, 700px);
   width: 100vw;
   margin: 0;
   overflow-x: clip;
@@ -145,9 +145,8 @@ body {
   height: 101%;
   content: '';
   background-image: linear-gradient(to bottom,
-    var(--trans-background-color),
-    var(--background-color)
-  );
+      var(--trans-background-color),
+      var(--background-color));
 }
 
 .landing-video {
@@ -192,7 +191,7 @@ body {
 }
 
 
-.logos-gallery{
+.logos-gallery {
   display: flex;
   padding-top: clamp(40px, 5.2vh, 80px);
   margin-left: -15vw;
@@ -214,7 +213,8 @@ body {
   font-size: 3em;
   color: var(--logo-color);
   text-align: center;
-  /*text-shadow: 2px 2px 0px rgb(12, 198, 255), -2px -2px 0px rgb(241, 73, 73);*/
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  /* Improved contrast */
 }
 
 .main-subtitle {
@@ -225,7 +225,7 @@ body {
   align-self: flex-start;
 }
 
-.title-container{
+.title-container {
   padding-top: 5vh;
   display: flex;
   align-items: center;
@@ -233,7 +233,7 @@ body {
   flex-direction: column;
 }
 
-.at-a-glance-container{
+.at-a-glance-container {
   display: flex;
   justify-content: space-between;
 }
@@ -241,11 +241,14 @@ body {
 .glance-card {
   width: 49%;
   background-color: var(--card-color);
-  border-radius: 5px;
+  border-radius: 12px;
   color: var(--text-color);
   padding: 0 1em 0 1em;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .glance-details {
@@ -277,17 +280,19 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center; /* Center children horizontally */
-  width: 100%; /* avoid 100vw causing horizontal overflow with scrollbar */
+  justify-content: center;
+  /* Center children horizontally */
+  width: 100%;
+  /* avoid 100vw causing horizontal overflow with scrollbar */
   margin-top: 2em;
 }
 
 .bold-face-time {
-  font-size: clamp(12px, 4em,50px);
+  font-size: clamp(12px, 4em, 50px);
 }
 
 .page-center {
-  width: min( 35em, 90vw);
+  width: min(35em, 90vw);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -383,21 +388,25 @@ body {
   * {
     font-size: 18px;
   }
+
   .at-a-glance-container {
     flex-direction: column;
     gap: 0.5em;
     padding-right: 1.5em;
     max-width: 15em;
   }
+
   .glance-card {
     width: 100%;
   }
+
   .page-center {
     flex-direction: row;
     align-items: start;
-    width: min( calc(35em + 35em + 2em), 90vw);
+    width: min(calc(35em + 35em + 2em), 90vw);
     padding: 1em;
   }
+
   /* Keep the main content from consuming extra width so the sidebar can grow */
   .content-container {
     max-width: 45em;
@@ -424,9 +433,9 @@ body {
 
 
 @media print,
-  (-webkit-min-device-pixel-ratio: 1.25),
-  (min-resolution: 1.25dppx),
-  (min-resolution: 120dpi) {
+(-webkit-min-device-pixel-ratio: 1.25),
+(min-resolution: 1.25dppx),
+(min-resolution: 120dpi) {
   /* Style adjustments for high resolution devices */
 }
 
@@ -437,6 +446,7 @@ body {
    ========================================================================== */
 
 @media print {
+
   *,
   *::before,
   *::after {
@@ -497,3 +507,314 @@ body {
   }
 }
 
+/* Mobile Navigation */
+/* Mobile Navigation */
+/* Mobile Navigation */
+/* Mobile Navigation */
+.mobile-nav {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  left: auto;
+  transform: none;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 90%;
+  max-width: 450px;
+
+  /* Glassmorphism */
+  background-color: rgba(35, 46, 73, 0.4);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  border-radius: 20px;
+  padding: 0;
+
+  display: flex;
+  flex-direction: column-reverse;
+
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  overflow: hidden;
+  /* Removed max-height transition on container, it will grow with content */
+}
+
+/* Nav Menu Wrapper for Grid Animation */
+.nav-menu-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.mobile-nav.expanded .nav-menu-wrapper {
+  grid-template-rows: 1fr;
+  height: auto;
+}
+
+.nav-menu-list {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Padding moved here to be inside the animated part */
+  padding: 0px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.mobile-nav.expanded .nav-menu-list {
+  opacity: 1;
+  /* padding: 20px 20px 10px 20px; */
+  /* Restore padding on expand */
+  pointer-events: auto;
+}
+
+.nav-bar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  padding: 0 20px;
+  flex-shrink: 0;
+}
+
+.horizontal-scroll-container {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-grow: 1;
+  height: 100%;
+  margin-right: 15px;
+  mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-item {
+  flex: 0 0 auto;
+  padding: 0 15px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 1.2rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.horizontal-item.active {
+  opacity: 1;
+  transform: scale(1.1);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.nav-menu-item {
+  padding: 15px 0;
+  color: var(--text-color);
+  cursor: pointer;
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 1.25rem;
+  text-align: right;
+  line-height: 1.1;
+  border-bottom: none;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.nav-menu-item:hover {
+  color: var(--accent-color);
+  transform: translateX(-10px);
+}
+
+/* Hamburger Animation */
+.hamburger-menu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+  width: 48px;
+  height: 48px;
+}
+
+.hamburger-menu svg {
+  /* No rotation on the SVG itself to keep alignment simple */
+  transform: none;
+}
+
+.hamburger-menu path {
+  transform-origin: 50% 50%;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/*
+   Icon strokes are at y=6, y=12, y=18. Center is 12,12.
+   Top (y=6): Move down 6px by translateY(6px).
+   Bottom (y=18): Move up 6px by translateY(-6px).
+   Rotation: 45deg.
+   Length: Scaled by sqrt(2) (~1.414) to fill the box diagonally.
+   Order: Translate (center) -> Rotate (align) -> ScaleX (lengthen).
+   (Note: scaleX applies to the local axis, so if after rotation X is diagonal, it lengthens diagonal).
+*/
+.mobile-nav.expanded .hamburger-menu path:nth-child(1) {
+  transform: translateX(-4px) translateY(4px) rotate(45deg) scaleX(1.41);
+}
+
+.mobile-nav.expanded .hamburger-menu path:nth-child(2) {
+  opacity: 0;
+}
+
+.mobile-nav.expanded .hamburger-menu path:nth-child(3) {
+  transform: translateY(-6px) translateX(-3.5px) rotate(-45deg) scaleX(1.414);
+}
+
+@media (prefers-color-scheme: light) {
+  .mobile-nav {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #222;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .horizontal-item,
+  .nav-menu-item,
+  .hamburger-menu {
+    color: #222;
+  }
+
+  .hamburger-menu {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.horizontal-item {
+  flex: 0 0 auto;
+  padding: 0 10px;
+  /* Decreased spacing */
+  color: var(--text-color);
+  font-size: 0.9rem;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.horizontal-item.active {
+  opacity: 1;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+/* Hide horizontal list when expanded */
+.mobile-nav.expanded .horizontal-scroll-container {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.hamburger-menu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hamburger-menu:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-menu-list {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0;
+  overflow-y: auto;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.1s;
+  /* Slight delay to wait for expansion */
+}
+
+.mobile-nav.expanded .nav-menu-list {
+  opacity: 1;
+}
+
+.nav-menu-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.nav-menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+@media (prefers-color-scheme: light) {
+  .mobile-nav {
+    background-color: rgba(255, 255, 255, 0.75);
+    color: #222;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  }
+
+  .horizontal-item {
+    color: #222;
+  }
+
+  .nav-menu-item {
+    color: #222;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .nav-menu-list {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .hamburger-menu {
+    color: #222;
+  }
+
+  .hamburger-menu:hover,
+  .nav-menu-item:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+/* Hide on larger screens */
+@media only screen and (min-width: 768px) {
+  .mobile-nav {
+    display: none;
+  }
+}
