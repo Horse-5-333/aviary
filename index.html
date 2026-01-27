@@ -40,7 +40,7 @@
       <!--   <source src="./img/sd-header-video.mp4" type="video/mp4">-->
       <!--  </video>-->
     </div>
-    <div class="logos-gallery">
+    <!-- <div class="logos-gallery">
       <img src="img/ams_logo.png" alt="ams_logo" class="logo-badge">
       <img src="img/ubc_logo.png" alt="ubc_logo" class="logo-badge">
       <img src="img/ams_logo.png" alt="ams_logo" class="logo-badge">
@@ -62,7 +62,7 @@
       <img src="img/ams_logo.png" alt="ams_logo" class="logo-badge">
       <img src="img/ubc_logo.png" alt="ubc_logo" class="logo-badge">
 
-    </div>
+    </div> -->
     <!--    <img src="img/aviary_logo.png" alt="aviary_logo" class="main-logo">-->
     <div class="title-container">
       <div class="title-wrapper">
@@ -83,20 +83,25 @@
       <div class="at-a-glance-container">
         <div class="glance-card">
           <h1 class="glance-header">Crowding</h1>
-          ⚠️ Completely packed
-          <img src="img/3crowd.svg" alt="low_crowd" class="crowd-icon">
-          <p class="glance-details">18 out of 18 climbers as of 12:22 PM</p>
+          <div id="crowd-status">No one's here</div>
+          <img src="img/0crowd.svg" alt="low_crowd" class="crowd-icon" id="crowd-icon">
+          <p class="glance-details" id="crowd-details">
+            <italic>18 / 18 climbers as of 12:22 PM</italic>
+          </p>
         </div>
         <div class="glance-card">
           <h1 class="glance-header" style="padding-top: 0;">Next Session</h1>
-          Starts in 36 minutes
+          <div id="session-countdown">Loading...</div>
           <div class="session-time-container">
             <div class="bold-face-time">
-              4:00 <p class="session-time-to">~ to ~</p> 6:00
+              <span id="session-start">--</span>
+              <p class="session-time-to">~ to ~</p> <span id="session-end">--</span>
             </div>
           </div>
+          <p class="glance-details" id="crowd-details">ⓘ View Full Schedule</p>
         </div>
       </div>
+
       <div class="content-container">
         <h1 class="general-header">About</h1>
         The Aviary is a climbing wall located in the AMS Nest on the UBC Vancouver campus. We are open to everybody, and
@@ -175,6 +180,9 @@
         below. At the conclusion of each session, all climbers must exit the gym to make way for those waiting to enter.
         Climbers who wish to continue their session after the two-hour period will need to rejoin the queue and wait for
         their turn.
+        <div id="schedule-section">
+          <!-- Schedule rendered by JS -->
+        </div>
         <h1 class="general-header">Bookings</h1>
         The Aviary is available for private bookings. We can accommodate a maximum group size of 12 participants, and no
         climbing experience is necessary.

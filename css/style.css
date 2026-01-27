@@ -173,7 +173,7 @@ body {
   border-radius: 10px;
   text-align: center;
   margin-top: 0.25em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.25em;
   padding: 0.5em;
   display: flex;
   justify-content: center;
@@ -226,7 +226,7 @@ body {
 }
 
 .title-container {
-  padding-top: 5vh;
+  padding-top: 10vh;
   display: flex;
   align-items: center;
   justify-content: end;
@@ -254,7 +254,6 @@ body {
 .glance-details {
   color: var(--transparent-text);
   font-size: 0.8rem;
-  font-style: italic;
   padding: 0 0 1em 0;
   margin: 0;
 }
@@ -267,13 +266,51 @@ body {
   margin-bottom: 0;
 }
 
+.sunken-time {
+  display: inline-flex;
+  align-items: center;
+  /* keep h and m aligned with numbers */
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 2px 8px;
+  margin: 0 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  vertical-align: text-bottom;
+  position: relative;
+  height: 1.4em;
+  /* Ensure height fits text */
+}
+
+/* Ensure the digit animation stays targeted */
+.anim-digit {
+  display: inline-block;
+  min-width: 1.1em;
+  /* prevent jitter when digit changes 1 vs 0 */
+  text-align: center;
+  animation: dropDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes dropDown {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 .general-header {
   font-family: "Special Gothic Expanded One", sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 1em;
+  font-size: 1.25em;
   border-bottom: 1px solid var(--transparent-text);
   padding: 0.5em 0 0.25em 0;
+
+  /* Prevent nav bar from blocking content */
 }
 
 .page-wrapper {
@@ -394,6 +431,11 @@ body {
     gap: 0.5em;
     padding-right: 1.5em;
     max-width: 15em;
+    position: sticky;
+    top: 10px;
+    /* Smaller offset when no top nav exists */
+    align-self: flex-start;
+    /* Ensure it doesn't stretch and sticky works correctly flex behavior */
   }
 
   .glance-card {
@@ -411,6 +453,8 @@ body {
   .content-container {
     max-width: 45em;
   }
+
+
 
 }
 
@@ -535,7 +579,7 @@ body {
   flex-direction: column-reverse;
 
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  z-index: 1000;
+  z-index: 1100;
   border: 1px solid rgba(255, 255, 255, 0.18);
 
   overflow: hidden;
@@ -625,7 +669,8 @@ body {
 .horizontal-item.active {
   opacity: 1;
   transform: scale(1.1);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(var(--logo-color), 0.5);
+  color: var(--logo-color);
 }
 
 .nav-menu-item {
@@ -798,6 +843,11 @@ body {
     color: #222;
   }
 
+  .hamburger-menu {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+
   .nav-menu-item {
     color: #222;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -817,9 +867,482 @@ body {
   }
 }
 
-/* Hide on larger screens */
-@media only screen and (min-width: 768px) {
+/* ==========================================================================
+   Intermediate Navigation (Wide Mobile)
+   ========================================================================== */
+@media only screen and (min-width: 42em) and (max-width: 70em) {
   .mobile-nav {
+    width: min(calc(35em + 35em + 2em), 90vw);
+    max-width: none;
+    /* Override default 450px limit */
+  }
+
+  /* Fixed width gradient mask for tablet size */
+  .horizontal-scroll-container {
+    mask-image: linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 40px, black calc(100% - 40px), transparent);
+  }
+
+}
+
+/* ==========================================================================
+   Desktop Navigation
+   ========================================================================== */
+@media only screen and (min-width: 70em) {
+  .mobile-nav {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    border-radius: 0;
+    border: none;
+    background-color: rgba(35, 46, 73, 0.8);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    padding: 0;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .general-header {
+    scroll-margin-top: 80px;
+  }
+
+  /* Override sticky position for desktop where top nav exists */
+  .at-a-glance-container {
+    top: 100px;
+    /* Clear the top nav (approx 60-80px) */
+  }
+
+  /* Detached State Removed */
+
+  /* Detached State Removed */
+
+  .nav-bar-header {
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .hamburger-menu {
     display: none;
+  }
+
+  .horizontal-scroll-container {
+    mask-image: none;
+    -webkit-mask-image: none;
+    justify-content: center;
+    overflow-x: visible;
+    padding: 0;
+    margin: 0;
+    width: auto;
+    flex-grow: 0;
+    gap: 1em;
+  }
+
+  .horizontal-item {
+    opacity: 0.7;
+    font-size: 0.9rem;
+    /* Reduced for better fit on 70em screens */
+    padding: 0 15px;
+  }
+
+  .horizontal-item:hover {
+    opacity: 1;
+    color: var(--logo-color);
+  }
+
+  .horizontal-item.active {
+    opacity: 1;
+    transform: scale(1.1);
+    color: var(--logo-color);
+  }
+
+  @media (prefers-color-scheme: light) {
+    .mobile-nav {
+      background-color: rgba(255, 255, 255, 0.75);
+      /* Match mobile contrast */
+    }
+  }
+}
+
+/* =========================================
+   Full Schedule Styles
+   ========================================= */
+
+#schedule-section {
+  margin-top: 1rem;
+  padding-bottom: 2rem;
+  overflow: hidden;
+}
+
+.week-container {
+  margin-bottom: 0.5rem;
+}
+
+.week-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+}
+
+.week-label {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 1.25rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.week-nav-btn {
+  background-color: var(--card-color);
+  border: 2px solid var(--trans-background-color);
+  color: var(--text-color);
+  padding: 0.4rem 0.8rem;
+  /* Increased Size */
+  border-radius: 8px;
+  font-size: 1.1rem;
+  /* Prominent */
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.week-nav-btn:hover {
+  background-color: var(--accent-color);
+  color: var(--background-color);
+  transform: scale(1.05);
+}
+
+.week-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.week-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  background-color: var(--card-color);
+  color: var(--text-color);
+  transform: none;
+}
+
+/*
+   STRICT GRID SYSTEM
+   No Time Column
+*/
+
+/* Desktop Grid */
+.schedule-grid-desktop {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: 50px;
+  gap: 0 0.75rem;
+  position: relative;
+
+  /* Deboss Effect */
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  /* Reduced top padding to remove gap above first event/header */
+  padding: 0.5rem 1rem 1rem 1rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  /* Ensure animations work */
+  will-change: transform, opacity;
+}
+
+/* Animation Classes */
+.slide-out-left {
+  animation: slideOutLeft 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.slide-out-right {
+  animation: slideOutRight 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 0.3s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  to {
+    transform: translateX(50px);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
+/* Current Time Bar */
+.current-time-bar {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  /* Fills the grid-column area */
+  height: 2px;
+  background-color: rgba(255, 60, 60, 0.8);
+  z-index: 20;
+  pointer-events: none;
+  box-shadow: 0 0 4px rgba(255, 0, 0, 0.5);
+}
+
+.current-time-bar::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  background-color: rgba(255, 60, 60, 1);
+  border-radius: 50%;
+}
+
+/* Time labels removed */
+.time-label-cell {
+  display: none;
+}
+
+/* Desktop Headers */
+.schedule-header-cell {
+  text-align: center;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--trans-background-color);
+  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-color);
+  height: auto;
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Event Card */
+.event-card {
+  /* Dark Mode: Lighter than background */
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  border-left: 4px solid var(--text-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.9rem;
+  overflow: hidden;
+  margin: 0.15rem 0;
+  position: relative;
+  z-index: 1;
+  color: var(--text-color);
+}
+
+.event-card:hover {
+  z-index: 10;
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Light Mode Fix */
+@media (prefers-color-scheme: light) {
+  .event-card {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #222;
+    border-left: 4px solid #555;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .event-card:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  }
+
+  .event-card .event-time {
+    color: #444;
+  }
+
+  .event-title {
+    color: #111;
+  }
+
+  .schedule-grid-desktop,
+  .schedule-grid-mobile {
+    background-color: rgba(0, 0, 0, 0.03);
+    /* Lighter Deboss */
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Time Bar for Light Mode */
+  .current-time-bar {
+    background-color: rgba(220, 0, 0, 0.8);
+  }
+
+  .current-time-bar::before {
+    background-color: rgba(220, 0, 0, 1);
+  }
+}
+
+.event-card.type-open {
+  border-left-color: var(--accent-color);
+}
+
+.event-card.type-lesson {
+  border-left-color: var(--logo-color);
+}
+
+.event-time {
+  font-size: 0.8rem;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.1rem;
+  opacity: 0.9;
+  line-height: 1.2;
+}
+
+.event-title {
+  font-family: "Special Gothic Expanded One", sans-serif;
+  font-size: 1.0rem;
+  margin: 0;
+
+  /* Text Wrapping Logic */
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+  line-height: 1.0;
+  /* Tight line height for multiline */
+  max-height: 2.2em;
+  /* Ensure max 2 lines ish */
+}
+
+/* Mobile Controls */
+.mobile-controls {
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-nav-btn {
+  background: var(--card-color);
+  border: 2px solid var(--trans-background-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  /* Big */
+  border-radius: 8px;
+  font-size: 1.2rem;
+  /* Big */
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.mobile-nav-btn:active {
+  transform: scale(0.95);
+  background-color: var(--accent-color);
+  color: var(--background-color);
+}
+
+.mobile-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  transform: none;
+}
+
+/* Mobile Grid - 3 DAY VIEW */
+.schedule-grid-mobile {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 50px;
+  gap: 0 0.5rem;
+  position: relative;
+
+  /* Deboss Effect */
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  /* Reduced padding */
+  padding: 0.5rem 0.8rem 0.8rem 0.8rem;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  will-change: transform, opacity;
+}
+
+.mobile-header-cell {
+  text-align: center;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--trans-background-color);
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  /* Slightly smaller than desktop */
+  font-weight: bold;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-time-col {
+  display: none;
+}
+
+
+/* Responsive Logic */
+@media (max-width: 1024px) {
+  .mobile-controls {
+    display: flex;
+  }
+}
+
+/* View Switchers */
+.mobile-view {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .desktop-view {
+    display: none;
+  }
+
+  .mobile-view {
+    display: block;
   }
 }
