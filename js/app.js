@@ -376,12 +376,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeStr = formatTime(nextOpenTime);
         const dayStr = nextOpenTime.toLocaleDateString('en-US', { weekday: 'short' });
         if (nextOpenTime.toDateString() === now.toDateString()) {
-          crowdDetails.textContent = `Opens today at ${timeStr}`;
+          crowdDetails.textContent = "";
         } else {
           crowdDetails.textContent = `Opens ${dayStr} at ${timeStr}`;
         }
       } else {
-        crowdDetails.textContent = "Check full schedule below";
+        crowdDetails.textContent = "";
       }
       return;
     }
