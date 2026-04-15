@@ -107,7 +107,7 @@ li {
   height: 50vh;
   z-index: -1;
   pointer-events: none;
-  background-image: url('https://ubc-aviary.com/resources/banner-1-min.jpg');
+  background-image: url('https://ubc-aviary.com/banner-1-min.jpg');
   background-size: cover;
   background-position: center;
 }
@@ -233,6 +233,14 @@ li {
   gap: 0;
   line-height: .25;
   padding: 1rem;
+}
+
+.bold-face-time.tomorrow-view {
+  line-height: 1;
+  /* Reset line height for multi-line text */
+  font-size: clamp(1.2rem, 5vw, 2.5rem);
+  /* Slightly smaller max size to ensure fit */
+  gap: 0.2em;
 }
 
 #session-countdown {

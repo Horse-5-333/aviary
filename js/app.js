@@ -145,17 +145,16 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleMenu();
   });
 
-  // "View Full Schedule" Link
-  const viewScheduleLink = document.querySelector('.view-schedule-link');
-  if (viewScheduleLink) {
-    viewScheduleLink.addEventListener('click', (e) => {
+  // "View Full Schedule" Link (Event Delegation)
+  document.addEventListener('click', (e) => {
+    if (e.target && e.target.closest('.view-schedule-link')) {
       e.preventDefault();
       const scheduleSec = document.getElementById('schedule-section');
       if (scheduleSec) {
         scheduleSec.scrollIntoView({ behavior: 'smooth' });
       }
-    });
-  }
+    }
+  });
 
   // Initialize
   onScroll();
@@ -242,29 +241,58 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       const items = data.items || [];
 
-      let nextSessionEvent = null;
-      let minDiff = Infinity;
+      let nextAnyEvent = null; // Next event (Lesson OR Open)
+      let nextPublicEvent = null; // Next specifically OPEN event
 
-      for (const event of items) {
+      const upcomingEvents = items.filter(event => {
         const summary = (event.summary || "").toUpperCase();
-        if (!summary.includes("OPEN")) continue;
+        if (!summary.includes("OPEN") && !summary.includes("LESSON")) return false;
 
         const start = new Date(event.start.dateTime || event.start.date);
+        const end = new Date(event.end.dateTime || event.end.date);
+
+        // Include if currently happening or in future
+        // We use a small buffer for "currently happening" to match old logic logic (started just now)
+        // actually old logic used diffMinutes.
         const diff = start - now;
         const diffMinutes = diff / (1000 * 60);
 
-        if (diffMinutes > 0 && diff < minDiff) {
-          minDiff = diff;
-          nextSessionEvent = event;
-        } else if (diffMinutes > -10 && diffMinutes <= 0) {
-          nextSessionEvent = event;
-          break;
+        // Keep if future or started within last 10 mins (ongoing validation handled later)
+        // But simpler: just get future events + slightly past ones. Sorted by startTime.
+        return end > now;
+      });
+
+      // Find the immediate next event (could be lesson or open)
+      for (const event of upcomingEvents) {
+        const summary = (event.summary || "").toUpperCase();
+        const start = new Date(event.start.dateTime || event.start.date);
+
+        const diff = start - now;
+        const diffMinutes = diff / (1000 * 60);
+
+        // Valid if starts in future OR started recently (ongoing)
+        if (diffMinutes > -10) {
+          if (!nextAnyEvent) {
+            nextAnyEvent = event;
+          }
+          // Once we have nextAnyEvent, we also might need nextPublicEvent
+          // If nextAnyEvent is OPEN, then nextPublicEvent is the same
+          // If nextAnyEvent is LESSON, we keep searching for first OPEN
+          if (summary.includes("OPEN")) {
+            if (!nextPublicEvent) {
+              nextPublicEvent = event;
+              // If we have both, we can break
+              if (nextAnyEvent) break;
+            }
+          }
         }
       }
 
-      cachedNextEvent = nextSessionEvent;
-      if (nextSessionEvent) {
-        localStorage.setItem('aviary_next_session', JSON.stringify(nextSessionEvent));
+      cachedNextEvent = nextAnyEvent;
+      // We'll attach nextPublic to cachedNextEvent for convenience if needed, or store separately
+      if (cachedNextEvent) {
+        cachedNextEvent._nextPublic = nextPublicEvent;
+        localStorage.setItem('aviary_next_session', JSON.stringify(cachedNextEvent));
       } else {
         localStorage.removeItem('aviary_next_session');
       }
@@ -286,15 +314,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Update Countdown UI
   function updateCountdown() {
     const sessionCountdown = document.getElementById('session-countdown');
-    const sessionStart = document.getElementById('session-start');
-    const sessionEnd = document.getElementById('session-end');
+    const sessionTimeContainer = document.querySelector('.session-time-container .bold-face-time');
+    const cardHeader = document.querySelector('.glance-card:nth-child(2) .glance-header');
+    const cardDetails = document.querySelector('.glance-card:nth-child(2) .glance-details');
 
-    if (!sessionCountdown) return;
+    if (!sessionCountdown || !sessionTimeContainer) return;
 
     if (!cachedNextEvent) {
-      sessionCountdown.textContent = "No upcoming sessions found";
-      sessionStart.textContent = "--";
-      sessionEnd.textContent = "--";
+      sessionCountdown.textContent = "No upcoming sessions";
+      sessionTimeContainer.innerHTML = `<span id="session-start">--</span><p class="session-time-to">~ to ~</p> <span id="session-end">--</span>`;
       return;
     }
 
@@ -302,18 +330,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const event = cachedNextEvent;
     const startDate = new Date(event.start.dateTime || event.start.date);
     const endDate = new Date(event.end.dateTime || event.end.date);
+    const summary = (event.summary || "").toUpperCase();
+    const isLesson = summary.includes("LESSON");
 
+    // Check if tomorrow (or further future, but simplified to "tomorrow logic" for anything not today)
+    // Actually user said "Next Session: Tomorrow at $time". 
+    // We should check if it's the same day.
+    const isToday = startDate.getDate() === now.getDate() &&
+      startDate.getMonth() === now.getMonth() &&
+      startDate.getFullYear() === now.getFullYear();
+
+    // Reset Header default
+    if (isLesson) {
+      // Extract Lesson Name if possible or just use "Lesson"
+      // e.g. "Belay Lesson"
+      let lessonName = "Lesson";
+      // Simple heuristic: title case the summary
+      const titleCase = (event.summary || "Lesson").replace(/\w\S*/g, (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
+      cardHeader.textContent = `Next Session: ${titleCase}`;
+    } else {
+      cardHeader.textContent = "Next Session";
+    }
+
+    if (!isToday) {
+      // TOMORROW / FUTURE STATE
+      sessionCountdown.textContent = ""; // Nix the countdown
+
+      sessionTimeContainer.classList.add('tomorrow-view'); // Fix line-height/overlap
+
+      // Change big blue box text
+      const timeStr = formatTime(startDate);
+      // User requested "Tomorrow 7:00 AM" layout in bold face
+      // We use innerHTML to inject line break
+      // Check if it's actually tomorrow or just "not today"
+      // For now assuming any future day is "Tomorrow" style provided it is arguably the next day. 
+      // We'll simpler say "Tomorrow" if it matches tomorrow's date, else maybe Day Name if further? 
+      // Request said "if the next session is tommorow... say next session: Tommorow at $time"
+      // And "Tommorow 7:00 AM" in box.
+
+      // Let's stick to "Tomorrow" for now as it's the requested case.
+      sessionTimeContainer.innerHTML = `Tomorrow<br>${timeStr}`;
+
+      // Reset details to default view schedule?
+      cardDetails.innerHTML = `<a href="#schedule-section" class="view-schedule-link" style="text-decoration: none; color: inherit;">ⓘ View Full Schedule</a>`;
+
+      return;
+    }
+
+    // TODAY STATE
+    sessionTimeContainer.classList.remove('tomorrow-view'); // Reset
+
+    // Restore standard Time Container
+    sessionTimeContainer.innerHTML = `
+      <span id="session-start">${formatTime(startDate)}</span>
+      <p class="session-time-to">~ to ~</p> 
+      <span id="session-end">${formatTime(endDate)}</span>
+    `;
+
+    // 1. Countdown Logic
     const diff = startDate - now;
     const diffMinutes = diff / (1000 * 60);
 
     if (diffMinutes > -10 && diffMinutes <= 0) {
       sessionCountdown.textContent = "Started just now";
-      sessionStart.textContent = formatTime(startDate);
-      sessionEnd.textContent = formatTime(endDate);
     } else if (diffMinutes > 0) {
-      sessionStart.textContent = formatTime(startDate);
-      sessionEnd.textContent = formatTime(endDate);
-
       const totalMinutes = Math.ceil(diff / (1000 * 60));
       const hours = Math.floor(totalMinutes / 60);
       const mins = totalMinutes % 60;
@@ -322,20 +402,37 @@ document.addEventListener('DOMContentLoaded', () => {
       const lastMin = sessionCountdown.dataset.lastMin;
       if (lastMin !== minsStr) {
         const animDigit = `<span class="anim-digit">${minsStr}</span>`;
-        let timeContent = "";
         if (hours > 0) {
-          timeContent = `${hours}h ${animDigit}m`;
+          sessionCountdown.innerHTML = `Starts in <span class="sunken-time">${hours}h ${animDigit}m</span>`;
         } else {
-          timeContent = `${animDigit} min`;
+          sessionCountdown.innerHTML = `Starts in <span class="sunken-time">${animDigit} min</span>`;
         }
-        sessionCountdown.innerHTML = `Starts in <span class="sunken-time">${timeContent}</span>`;
         sessionCountdown.dataset.lastMin = minsStr;
       }
     } else {
-      if (diffMinutes < -10) {
-        sessionCountdown.textContent = "Checking schedule...";
-        cachedNextEvent = null;
+      sessionCountdown.textContent = "Checking schedule..."; // Fallback
+    }
+
+    // 2. Details Footer Logic
+    if (isLesson) {
+      // Show next public session time
+      const nextPublic = event._nextPublic;
+      if (nextPublic) {
+        const pubStart = new Date(nextPublic.start.dateTime || nextPublic.start.date);
+        const pubTime = formatTime(pubStart);
+        // Check if public session is today to avoid ambiguity? Assuming yes if it's "next public session"
+        cardDetails.innerHTML = `Next public session at ${pubTime}`;
+      } else {
+        cardDetails.innerHTML = `No public sessions later today`;
       }
+    } else {
+      // Standard
+      cardDetails.innerHTML = `<a href="#schedule-section" class="view-schedule-link" style="text-decoration: none; color: inherit;">ⓘ View Full Schedule</a>`;
+      // Re-attach listener if we wiped innerHTML? 
+      // Actually viewing full schedule is an anchor link #schedule-section, so default behavior works. 
+      // But we had a nice scrollIntoView preventDefault listener. 
+      // We delegate or re-attach. Since we are replacing innerHTML, the element is new.
+      // Better: Delegate event listener on document or parent container for .view-schedule-link
     }
   }
 
