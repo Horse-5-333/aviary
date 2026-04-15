@@ -22,7 +22,10 @@ Live demo: https://horse-5-333.github.io/aviary
 
 | | Old site | New site |
 |---|---|---|
-| Desktop landing | [screenshot](./screenshots/old-homepage-desktop.png) | [screenshot](./screenshots/my-homepage-desktop.png) |
-| Mobile landing | [screenshot](./screenshots/old-homepage-mobile.png) | [screenshot](./screenshots/my-homepage-mobile.png) |
-| Schedule (desktop) | [screenshot](./screenshots/old-schedule-desktop.png) | [screenshot](./screenshots/my-schedule-desktop.png) |
-| Schedule (mobile) | [screenshot](./screenshots/old-schedule-mobile.png) | [screenshot](./screenshots/my-schedule-mobile.png) |
+| Desktop landing | ![screenshot](./screenshots/old-homepage-desktop.png) | ![screenshot](./screenshots/my-homepage-desktop.png) |
+| Mobile landing | ![screenshot](./screenshots/old-homepage-mobile.png) | ![screenshot](./screenshots/my-homepage-mobile.png) |
+| Schedule (desktop) | ![screenshot](./screenshots/old-schedule-desktop.png) | ![screenshot](./screenshots/my-schedule-desktop.png) |
+| Schedule (mobile) | ![screenshot](./screenshots/old-schedule-mobile.png) | ![screenshot](./screenshots/my-schedule-mobile.png) |
+
+### New Mobile Nav Menu
+![screenshot](./screenshots/my-menu-mobile.png)
