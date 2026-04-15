@@ -1,5 +1,12 @@
-# aviary
+# The Aviary
 The Aviary is a small, volunteer climbing gym run in the Nest at UBC. This project aims to remake their outdate website with something modern and appealing without comprimising on the important info that the Aviary seeks to publish about their gym. 
+
+## This project...
+ - Uses sleek browser features like `background-blur` for beautiful rendering
+ - Designed for modern, mobile-first browsing
+ - Uses cached browser requests to fetch and display a custom schedule, optimized for mobile and desktop respectively
+ - Shows current gym cacacity (though the API/widget the old site used to pull this data is gone)
+ - Faithfully keeps every bit of information present on the current Aviary website
 
 ### New Mobile Navigation Menu!
 ![menu](./screenshots/my-menu-mobile.png)
