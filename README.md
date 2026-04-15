@@ -1,21 +1,28 @@
-# The Aviary
-The Aviary is a small, volunteer climbing gym run in the Nest at UBC. This project aims to remake their outdate website with something modern and appealing without comprimising on the important info that the Aviary seeks to publish about their gym. 
+# The Aviary — Website Redesign
 
-## This project...
- - Uses sleek browser features like `background-blur` for beautiful rendering
- - Designed for modern, mobile-first browsing
- - Uses cached browser requests to fetch and display a custom schedule, optimized for mobile and desktop respectively
- - Shows current gym cacacity (though the API/widget the old site used to pull this data is gone)
- - Faithfully keeps every bit of information present on the current Aviary website
+A full redesign of [The Aviary](https://ubc-aviary.com)'s website, a volunteer-run 
+climbing gym at UBC. Built unsolicited, pitched to and reviewed by the club president, 
+after identifying their existing site as outdated and broken on mobile.
 
-### New Mobile Navigation Menu!
-![menu](./screenshots/my-menu-mobile.png)
+Live demo: https://horse-5-333.github.io/aviary
+
+## What's new
+
+- **Custom schedule renderer** — parses The Aviary's public Google Calendar feed and 
+  renders a fully custom weekly view with swipe/scroll navigation, replacing the 
+  original embedded Google Calendar widget
+- **Mobile-first redesign** — the original site was unusable on mobile; the new version 
+  is designed for it first, with a sticky bottom nav and responsive layouts throughout
+- **Crowding & session widget** — live display of current gym capacity and next 
+  upcoming session surfaced directly on the landing page
+- **backdrop-filter blur** — modern CSS for hero overlay rendering
+- Webpack build pipeline with dev/prod configs
 
 ## Comparisons
-| Old Website | New Site Mockup |
-|--|--|
-| ![old landing page](./screenshots/old-homepage-desktop.png) | ![new landing page](./screenshots/my-homepage-desktop.png) |
-| ![old mobile landing page](./screenshots/old-homepage-mobile.png) | ![new mobile landing page](./screenshots/my-homepage-mobile.png) |
-| ![old hours page](./screenshots/old-schedule-desktop.png) | ![new landing page](./screenshots/my-schedule-desktop.png) |
-| ![old hours page mobile](./screenshots/old-schedule-mobile.png) | ![new landing page mobile](./screenshots/my-schedule-mobile.png) |
 
+| | Old site | New site |
+|---|---|---|
+| Desktop landing | [screenshot](./screenshots/old-homepage-desktop.png) | [screenshot](./screenshots/my-homepage-desktop.png) |
+| Mobile landing | [screenshot](./screenshots/old-homepage-mobile.png) | [screenshot](./screenshots/my-homepage-mobile.png) |
+| Schedule (desktop) | [screenshot](./screenshots/old-schedule-desktop.png) | [screenshot](./screenshots/my-schedule-desktop.png) |
+| Schedule (mobile) | [screenshot](./screenshots/old-schedule-mobile.png) | [screenshot](./screenshots/my-schedule-mobile.png) |
